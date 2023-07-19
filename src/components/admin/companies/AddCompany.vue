@@ -14,7 +14,7 @@ function uploadImage(event) {
 
 }
 function save() {
-        console.log('asd');
+        
     let data = new FormData();
    
     
@@ -24,6 +24,7 @@ function save() {
         data.append('logo', image.value);
         company.store(data);
     }
+    
 }
 </script>
 <template>

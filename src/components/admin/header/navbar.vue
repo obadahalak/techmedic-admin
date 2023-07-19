@@ -34,12 +34,12 @@
                 </li>
             </router-link>
 
-            <!-- <router-link :to="{ name: 'profile' }"> -->
+            <router-link :to="{ name: 'profile' }">
 
                 <li class=" text-white  bg-gray-700 rounded-md p-2 cursor-pointer hover:font-bold hover:text-lg hover:shadow-sm">
                     <span>profile</span>
                 </li>
-            <!-- </router-link> -->
+            </router-link>
         </nav>
     </div>
 </template>

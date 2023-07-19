@@ -1,14 +1,13 @@
 import axios from "axios";
 import Notify from 'simple-notify'
 import { useGlobal } from '@/stores/global';
-
+import router from "../router";
 
 const createInstance = axios.create({
     baseURL: `${import.meta.env.VITE_BASE_URL}`,
  
     headers: {
         'Accept': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
     },
  
     validateStatus: function (status) {
@@ -42,7 +41,7 @@ const createInstance = axios.create({
             });
         }
         if(status===404){
-              new Notify({
+          return     new Notify({
                 status: 'error',
                 title: 'Not found',
                 text: 'certifiacte not found ',
@@ -51,10 +50,24 @@ const createInstance = axios.create({
                 autotimeout: 1000,
                 type: 3
             });  
-           
-            return true;
+            
+            
            
         }
+
+        if(status===401){
+            new Notify({
+              status: '401',
+              title: 'Not authorize',
+              text: 'please login to authorize ',
+              effect: 'slide',
+              'autoclose':true,
+              autotimeout: 1000,
+              type: 3
+          }); 
+          return router.push('/login'); 
+        }
+       
 
     },
 });
@@ -63,7 +76,14 @@ const createInstance = axios.create({
 createInstance.interceptors.request.use(config => {
    
     useGlobal().setloading(true);
+    if(router.currentRoute.value.name !=='login' && !localStorage.getItem('token')){
 
+        router.push('/login');
+    }
+    if(router.currentRoute.value.name=='login' && localStorage.getItem('token')){
+         router.back();
+    }
+    config.headers.Authorization='Bearer ' + localStorage.getItem('token');
     return config;
 
 });

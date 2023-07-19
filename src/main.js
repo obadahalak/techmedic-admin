@@ -12,14 +12,9 @@ const pinia = createPinia();
 
 
 
-app.use(router)
 app.use(pinia);
+app.use(router)
 app.use(initFlowbite());
 app.use(createPinia())
 
-// function isEmpty(value) {
-//     return value === null || value === undefined || value === '';
-//   }
-  
-  app.config.globalProperties.isEmpty = 'asdasda';
 app.mount('#app')
