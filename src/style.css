@@ -17,3 +17,8 @@ img{
  input , select ,option {
     @apply text-black
 }
+.card-border{
+    border-top-right-radius: 2rem;
+
+    border-bottom-left-radius: 2rem;
+}

@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import { useAuth } from '@/stores/admin/auth.js';
-let email = ref('');
-
-let password = ref('');
 const Auth = useAuth();
+
+let email = ref('');
+let password = ref('');
+
 function login() {
 
     Auth.login({
@@ -43,10 +44,3 @@ function login() {
     </div>
 </template>
 
-<style  scoped>
-.card-border {
-    border-top-right-radius: 2rem;
-
-    border-bottom-left-radius: 2rem;
-}
-</style>
