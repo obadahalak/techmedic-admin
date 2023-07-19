@@ -26,7 +26,7 @@ export const useAuth = defineStore('auth', {
 
 
     update(data) {
-      console.log(data);
+     
       http.post('/admin/update', data).then((response) => {
         this.token = response.data.data.token
         localStorage.setItem('token', this.token)

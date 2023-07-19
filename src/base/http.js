@@ -96,7 +96,7 @@ createInstance.interceptors.response.use(function (response) {
 
 
 }, function (error) {
-    console.log('eeeee'+error);
+   
     useGlobal().setloading(false);
     return Promise.reject(error);
 });

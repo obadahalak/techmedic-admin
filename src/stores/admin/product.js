@@ -18,7 +18,7 @@ export const useProduct = defineStore('product', {
 
 
             http.post('admin/products/', data).then((response) => {
-                console.log(response.data);
+               
                 const data=response.data.data;
                 this.data.unshift({
                 'id':data.id,

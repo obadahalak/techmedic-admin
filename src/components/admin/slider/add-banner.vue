@@ -22,7 +22,7 @@ function save() {
 
     if (!isEmpty(image.value)) {
         
-        console.log(image.value);
+      
        Array.from(image.value).forEach(image => {
 
             data.append('images[]', image);

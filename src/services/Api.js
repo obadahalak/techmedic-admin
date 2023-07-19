@@ -5,6 +5,6 @@ export function getCertificates(page){
      http.get(`certificates?page=${page}`).then((response)=>{
             return response.data;
     }).catch((error)=>{
-        console.log(error);
+        this.error=error.data
     });
 }

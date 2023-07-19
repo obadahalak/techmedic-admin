@@ -18,7 +18,7 @@ export const useCertificate = defineStore('certificate', {
 
 
             http.post('admin/certificates/', data).then((response) => {
-                console.log(response.data);
+          
                 this.data.unshift(response.data.data);
             }).catch((error)=>{
                 this.error=error.response.data.errors;
