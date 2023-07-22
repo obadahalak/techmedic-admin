@@ -25,6 +25,15 @@ export const useCompany = defineStore('company', {
             });
         },
 
+        all(){
+            http.get(`/admin/companies/all`)
+                .then((response) => {
+                  
+                    this.data = response.data.data;
+                }).catch((error) => {
+                    this.error = error.response.data.errors;
+                });
+        }, 
         getAll() {
             http.get(`/companies?page=${this.meta.current_page}`)
                 .then((response) => {

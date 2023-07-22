@@ -84,8 +84,10 @@ function submit() {
 
       <BaseTable :keys="product.data[0]">
 
+         
          <template #body>
 
+            
             <tr v-for="data in product.data"
                class="bg-white border-b overflow-x-auto dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
@@ -95,8 +97,10 @@ function submit() {
                <td class="px-6 py-4">
                   {{ data.name }}
                </td>
-               <td class="px-6 py-4 w-20 h-20 overflow-auto">
-                  {{ data.description }}
+               <td class="px-6 py-4  w-60 h-40  ">
+                  <p class="text-start  w-60 h-40 overflow-y-auto ">
+                     {{ data.description }}
+                  </p>
                </td>
 
                <td class="px-6 py-4">

@@ -45,8 +45,14 @@ function save() {
         document.getElementById('form').reset();  
     }
 }
+
+function getCategories(){
+    console.log(company_id.value);
+    categoryStore.all(company_id.value);
+}
 </script>
 <template>
+
     <div class="">
         <addForm :store="productStore" mode="product">
             <template #inputs>
@@ -55,6 +61,7 @@ function save() {
                     <div class="my-6 flex justify-center gap-5">
                         <div>
                             <BaseInput 
+                            :type="'input'"
                             type="text" 
                             v-model="name" 
                             :label="'enter the name'" 
@@ -65,7 +72,8 @@ function save() {
                     </div>
 
                     <div>
-                        <BaseInput 
+                        <BaseInput
+                            :type="'input'" 
                             type="number" 
                             v-model="price" 
                             :label="'enter the price'" 
@@ -76,6 +84,7 @@ function save() {
                     <div>
                         
                         <BaseInput 
+                            :type="'input'"
                             type="text" 
                             v-model="description" 
                             :label="'enter the product description'" 
@@ -85,26 +94,32 @@ function save() {
 
                 <div class="my-6 flex gap-5">
                     <div class="w-full">
-                        
-                        <p> select Category: </p>
-                        <select class="p-2 mt-2 w-full rounded-md " v-model="category_id">
+                     
+
+                        <BaseInput 
                             
-                            <option  class="p-2 bg-slate-50 border-2 " :value="category.id"
-                            v-for="category in categoryStore.data">
-                            {{ category.category_name }}
-                            </option>
-                        </select>
+                            :type="'select'"
+                            v-model="category_id" 
+                            :label="'select Category:'"
+                            :data="categoryStore.data" 
+                           
+                           
+                            />
+                        
                     </div>
 
                     <div class="w-full">
                         
-                        <p> select Company: </p>
-                        <select class="p-2 mt-2 w-full rounded-md " v-model="company_id">
-                            <option class="p-2  bg-slate-50 border-2 " :value="company.id"
-                            v-for="company in companyStore.data">
-                            {{ company.name }}
-                        </option>
-                    </select>
+                        <BaseInput 
+                            
+                            :type="'select'"
+                            v-model="company_id" 
+                            :label="'select Company:'"
+                            :data="companyStore.data" 
+                            @input="getCategories"
+                           
+                            />
+                        
                 </div>
             </div>
             <div class="my-6">

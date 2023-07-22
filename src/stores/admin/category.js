@@ -38,6 +38,17 @@ export const useCategory = defineStore('category', {
                 });
         },
 
+        all(id){
+            console.log(id);
+            http.get(`/admin/categories/all/?company_id=${id}`)
+                .then((response) => {
+                    console.log(response);
+                    this.data = response.data.data;
+                }).catch((error) => {
+                    this.error = error.response.data.errors;
+                });
+        }, 
+        
         get(id) { this.item = this.data.find((d) => d.id == id); },
 
         edit(data) {

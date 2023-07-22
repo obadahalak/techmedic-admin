@@ -7,8 +7,8 @@ import { useCategory } from '../../stores/admin/category';
 import { useProduct } from '../../stores/admin/product';
 onMounted(()=>{
    
-    useCompany().getAll();
-    useCategory().getAll();
+    useCompany().all();
+    // useCategory().all();
     useProduct().getAll();
 });
 </script>
