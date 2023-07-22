@@ -25,7 +25,7 @@ export const useProduct = defineStore('product', {
                 'name':data.name,
                 'description':data.description,
                 'price':data.price,
-                'image':data.images[0].path,
+                'image':data.images[0].src,
                 'company':data.company.name,
                 'category':data.category.name
             });

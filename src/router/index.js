@@ -9,7 +9,7 @@ const CertificateView = () => import('../views/admin/CertificateView.vue')
 
 const CategoryView = () => import('../views/admin/CategoryView.vue')
 
-const ProfilePage = () => import('../views/admin/ProfilePage.vue')
+const ProfilePage = () => import('../views/admin/ProfileView.vue')
 
 const ProductView = () => import('../views/admin/ProductView.vue')
 
@@ -17,7 +17,7 @@ const BannerView = () => import('../views/admin/BannerView.vue')
 
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_BASE_URL),
+  history: createWebHistory(),
   routes: [
    
     {

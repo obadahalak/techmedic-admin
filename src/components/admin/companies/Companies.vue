@@ -1,9 +1,9 @@
 <script setup>
 import { useCompany } from '../../../stores/admin/company';
 import BaseTable from '../../base/BaseTable.vue';
-import pagination from '@/components/base/pagination.vue';
+import BasePagination from '@/components/base/BasePagination.vue';
 import { edit } from '@/composables/company/edit.js'
-import modal from '@/components/base/modal.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 import { onMounted, ref } from 'vue';
 
 const baseImageUrl = import.meta.env.VITE_BASE_URL_IMAGE;
@@ -21,7 +21,7 @@ function uploadLogo(event) {
     logo.value = event.target.files[0]
 }
 
-function showModal(id, getType) {
+function showBaseModal(id, getType) {
    
     type.value = getType;
    
@@ -29,7 +29,7 @@ function showModal(id, getType) {
    
     window.scrollTo(0, 0);
    
-    document.getElementById('modal').classList.remove('hidden');
+    document.getElementById('BaseModal').classList.remove('hidden');
 }
 
 function submit() {
@@ -38,14 +38,14 @@ function submit() {
 
         if (company.status != 422 || company.status != 404) {
 
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('BaseModal').classList.add('hidden');
         }
     } else {
         company.delete(company.item.id);
 
         if (company.status != 422 || company.status != 404) {
 
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('BaseModal').classList.add('hidden');
         }
 
     }
@@ -56,7 +56,7 @@ function submit() {
 <template>
     <div v-if="company.data.length > 0">
 
-        <modal class="z-20 absolute  " :type="type" :mode="'company'">
+        <BaseModal class="z-20 absolute  " :type="type" :mode="'company'">
             <template #form>
 
                 <form class="flex flex-col">
@@ -92,7 +92,7 @@ function submit() {
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-500 text-white text-base font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                     @click="submit">{{ type }}</button>
             </template>
-        </modal>
+        </BaseModal>
 
         <BaseTable :keys="company.data[0]">
 
@@ -113,12 +113,12 @@ function submit() {
 
                     <td class="px-6 py-4  ">
 
-                        <button @click="showModal(data.id, 'edit')"
+                        <button @click="showBaseModal(data.id, 'edit')"
                             class="lg:mx-4 mx-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 w-20 my-1 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             type="button">
                             edit
                         </button>
-                        <button @click="showModal(data.id, 'delete')"
+                        <button @click="showBaseModal(data.id, 'delete')"
                             class=" lg:mx-4 mx-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 w-20 my-1 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             type="button">
                             delete
@@ -131,7 +131,7 @@ function submit() {
         </BaseTable>
 
         <div class="flex justify-center my-10">
-            <pagination :store="company" :meta="company.meta" />
+            <BasePagination :store="company" :meta="company.meta" />
         </div>
 
 

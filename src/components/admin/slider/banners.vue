@@ -1,7 +1,7 @@
 <script setup>
 
 import BaseTable from '../../base/BaseTable.vue';
-import modal from '@/components/base/modal.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 import { onMounted, ref } from 'vue';
 import { useBanner } from '../../../stores/admin/banner';
 
@@ -15,7 +15,7 @@ onMounted(() => {
 });
 
 
-function showModal(id,getType) {
+function showBaseModal(id,getType) {
 
     type.value=getType;
 
@@ -23,7 +23,7 @@ function showModal(id,getType) {
 
     window.scrollTo(0, 0);
 
-    document.getElementById('modal').classList.remove('hidden');
+    document.getElementById('BaseModal').classList.remove('hidden');
 }
 
 function submit() {
@@ -32,7 +32,7 @@ function submit() {
 
     if (banner.status != 422 || banner.status != 404) {
 
-        document.getElementById('modal').classList.add('hidden');
+        document.getElementById('BaseModal').classList.add('hidden');
     }
 
 }
@@ -41,7 +41,7 @@ function submit() {
 <template>
     <div v-if="banner.data.length > 0">
 
-        <modal class="z-20 absolute  " :title="'banner'" :type="type" >
+        <BaseModal class="z-20 absolute  " :title="'banner'" :type="type" >
             <template #form>
 
                 <form class="flex flex-col">
@@ -59,7 +59,7 @@ function submit() {
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-500 text-white text-base font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                     @click="submit">delete</button>
             </template>
-        </modal>
+        </BaseModal>
 
         <BaseTable :keys="banner.data[0]">
 
@@ -79,7 +79,7 @@ function submit() {
                     <td class="px-6 py-4  ">
 
 
-                        <button @click="showModal(data.id, 'delete')"
+                        <button @click="showBaseModal(data.id, 'delete')"
                             class=" lg:mx-4 mx-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 w-20 my-1 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             type="button">
                             delete

@@ -1,11 +1,11 @@
 <script setup>
-import addForm from "../../base/add-form.vue";
+import addForm from "../../base/AddForm.vue";
 import { ref } from "vue";
 import { isEmpty } from '@/composables/isEmpty.js'
 import { useProduct } from "../../../stores/admin/product";
 import { useCategory } from "../../../stores/admin/category";
 import { useCompany } from "../../../stores/admin/company";
-
+import BaseInput from "../../base/BaseInput.vue";
 const productStore = useProduct();
 
 const categoryStore = useCategory();
@@ -52,35 +52,42 @@ function save() {
             <template #inputs>
 
                 <form id="form" @submit.prevent="save">
-                    <div class="my-6 flex gap-5">
+                    <div class="my-6 flex justify-center gap-5">
                         <div>
-
-                        <p> name:</p>
-                        <input class="mt-2 w-full rounded-md " type="text" v-model="name" placeholder="enter product name">
+                            <BaseInput 
+                            type="text" 
+                            v-model="name" 
+                            :label="'enter the name'" 
+                          
+                            />
+                        
+                  
                     </div>
 
-
                     <div>
-
-                        <p> price:</p>
-                        <input class="mt-2 w-full rounded-md " type="number" v-model="price"
-                            placeholder="enter product price">
+                        <BaseInput 
+                            type="number" 
+                            v-model="price" 
+                            :label="'enter the price'" 
+                            />
                     </div>
                 </div>
                 <div class="my-6">
                     <div>
                         
-                        <p> description:</p>
-                        <input class="mt-2 w-full rounded-md " type="text" v-model="description"
-                            placeholder="enter product description">
+                        <BaseInput 
+                            type="text" 
+                            v-model="description" 
+                            :label="'enter the product description'" 
+                            />
                     </div>
                 </div>
 
-                <div class="my-6 flex justify-between gap-5">
-                    <div>
+                <div class="my-6 flex gap-5">
+                    <div class="w-full">
                         
                         <p> select Category: </p>
-                        <select class="mt-2 w-full rounded-md" v-model="category_id">
+                        <select class="p-2 mt-2 w-full rounded-md " v-model="category_id">
                             
                             <option  class="p-2 bg-slate-50 border-2 " :value="category.id"
                             v-for="category in categoryStore.data">
@@ -89,11 +96,11 @@ function save() {
                         </select>
                     </div>
 
-                    <div>
+                    <div class="w-full">
                         
                         <p> select Company: </p>
-                        <select class="mt-2 w-full rounded-md" v-model="company_id">
-                            <option class="p-2 bg-slate-50 border-2 " :value="company.id"
+                        <select class="p-2 mt-2 w-full rounded-md " v-model="company_id">
+                            <option class="p-2  bg-slate-50 border-2 " :value="company.id"
                             v-for="company in companyStore.data">
                             {{ company.name }}
                         </option>

@@ -2,7 +2,7 @@
 import { useCategory } from "../../../stores/admin/category";
 import { useCompany } from "../../../stores/admin/company";
 
-import addForm from "../../base/add-form.vue";
+import addForm from "../../base/AddForm.vue";
 import { isEmpty } from '@/composables/isEmpty.js'
 import { ref } from "vue";
 const category = useCategory();

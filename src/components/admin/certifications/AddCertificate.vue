@@ -1,6 +1,6 @@
 <script setup>
 import { useCertificate } from "../../../stores/admin/certificate";
-import addForm from "../../base/add-form.vue";
+import addForm from "../../base/AddForm.vue";
 import { ref } from "vue";
 import { isEmpty } from '@/composables/isEmpty.js'
 const certificate = useCertificate();

@@ -1,6 +1,6 @@
 <script setup>
 
-import addForm from "../../base/add-form.vue";
+import addForm from "../../base/AddForm.vue";
 import {  ref } from "vue";
 import { isEmpty } from '@/composables/isEmpty.js'
 import { useBanner } from "../../../stores/admin/banner";

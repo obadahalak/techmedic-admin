@@ -1,12 +1,11 @@
 <script setup>
 import BaseTable from '../../base/BaseTable.vue';
-import pagination from '@/components/base/pagination.vue';
+import BasePagination from '@/components/base/BasePagination.vue';
 import { edit } from '@/composables/product/edit.js'
-import modal from '@/components/base/modal.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
 import { onMounted, ref } from 'vue';
 import { useProduct } from '../../../stores/admin/product';
 
-const baseImageUrl = import.meta.env.VITE_BASE_URL_IMAGE;
 const product = useProduct();
 
 let type = ref();
@@ -17,13 +16,12 @@ onMounted(() => {
 });
 
 
-function showModal(id, getType) {
+function showBaseModal(id, getType) {
 
    type.value = getType;
 
    product.get(id);
 
-   window.scrollTo(0, 0);
 
    document.getElementById('modal').classList.remove('hidden');
 }
@@ -34,14 +32,14 @@ function submit() {
 
         if (product.status != 422 || product.status != 404) {
 
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('BaseModal').classList.add('hidden');
         }
     } else {
         product.delete(product.item.id);
 
         if (product.status != 422 || product.status != 404) {
 
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('BaseModal').classList.add('hidden');
         }
 
     }
@@ -52,7 +50,7 @@ function submit() {
 <template>
    <div v-if="product.data.length > 0">
 
-      <modal class="z-20 absolute  " :type="type" :mode="'product'">
+      <BaseModal class="z-20 fixed  " :type="type" :mode="'product'">
          <template #form>
 
             <form class="flex flex-col">
@@ -82,14 +80,14 @@ function submit() {
                class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-500 text-white text-base font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                @click="submit">{{ type }}</button>
          </template>
-      </modal>
+      </BaseModal>
 
       <BaseTable :keys="product.data[0]">
 
          <template #body>
 
             <tr v-for="data in product.data"
-               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+               class="bg-white border-b overflow-x-auto dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {{ data.id }}
@@ -97,7 +95,7 @@ function submit() {
                <td class="px-6 py-4">
                   {{ data.name }}
                </td>
-               <td class="px-6 py-4">
+               <td class="px-6 py-4 overflow-y-auto">
                   {{ data.description }}
                </td>
 
@@ -105,6 +103,7 @@ function submit() {
                   {{ data.price }}
                </td>
                <td class="px-6 py-4 flex">
+                 
                   <img class="lg:w-60 lg:h-60 w-20 mx-auto" :src="`${data.image}`" alt="">
                </td>
                <td class="px-6 py-4">
@@ -117,12 +116,12 @@ function submit() {
 
                <td class="px-6 py-4">
 
-                  <button @click="showModal(data.id, 'edit')"
+                  <button @click="showBaseModal(data.id, 'edit')"
                      class="lg:mx-4 mx-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 w-20 my-1 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                      type="button">
                      edit
                   </button>
-                  <button @click="showModal(data.id, 'delete')"
+                  <button @click="showBaseModal(data.id, 'delete')"
                      class=" lg:mx-4 mx-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 w-20 my-1 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                      type="button">
                      delete
@@ -135,7 +134,7 @@ function submit() {
       </BaseTable>
 
       <div class="flex justify-center my-10">
-         <pagination :store="product" :meta="product.meta" />
+         <BasePagination :store="product" :meta="product.meta" />
       </div>
 
 

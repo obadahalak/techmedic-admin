@@ -1,6 +1,6 @@
 <script setup>
 import { useCompany } from "../../../stores/admin/company";
-import addForm from "../../base/add-form.vue";
+import addForm from "../../base/AddForm.vue";
 import { ref } from "vue";
 import { isEmpty } from '@/composables/isEmpty.js'
 
