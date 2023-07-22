@@ -1,7 +1,7 @@
 <template>
     
     <div>
-        <nav class="flex  overflow-x-auto lg:justify-around md:justify-around sm:justify-around list-none p-4 border-b-2 bg-slate-100">
+        <nav class="flex  overflow-x-auto lg:justify-around md:justify-around sm:justify-around list-none p-4 border-b-2 border-gray-700 bg-slate-100">
             <router-link :to="{ name: 'company' }">
                 <li class="  p-2 cursor-pointer hover:text-bold hover:text-lg hover:shadow-sm">
                     <span>company</span>
