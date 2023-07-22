@@ -14,15 +14,15 @@ function uploadImage(event) {
 
 }
 function save() {
-        
     let data = new FormData();
-   
+    
     
     if (!isEmpty(name.value) && !isEmpty(image.value)) {
-
+        
         data.append('name', name.value);
         data.append('logo', image.value);
         company.store(data);
+        document.getElementById('form').reset();  
     }
     
 }
@@ -31,9 +31,10 @@ function save() {
     <div class="">
         <addForm :store="useCompany()" mode="company">
             <template #inputs>
+                <form id="form"  @submit.prevent="save">
 
-                <div class="my-10">
-                    <p>company name:</p>
+                    <div class="my-10">
+                        <p>company name:</p>
                     <input class="mt-2 w-full rounded-md " type="text" v-model="name"
                         placeholder="enter company name">
                 </div>
@@ -43,8 +44,9 @@ function save() {
                 </div>
 
                 <div>
-                    <button @click="save" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
+                    <button type="submit"  class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
                 </div>
+                </form>
             </template>
         </addForm>
 

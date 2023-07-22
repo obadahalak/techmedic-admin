@@ -1,11 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../views/admin/LoginView.vue'
-import CompanyView from '../views/admin/CompanyView.vue'
-import CertificateView from '../views/admin/CertificateView.vue';
-import CategoryView from '../views/admin/CategoryView.vue'
-import ProductView from '../views/admin/ProductView.vue'  
-import BannerView from '../views/admin/BannerView.vue'
-import ProfilePage from '../pages/ProfilePage.vue'
+
+
+const LoginView = () => import('../views/admin/LoginView.vue')
+
+const CompanyView = () => import('../views/admin/CompanyView.vue')
+
+const CertificateView = () => import('../views/admin/CertificateView.vue')
+
+const CategoryView = () => import('../views/admin/CategoryView.vue')
+
+const ProfilePage = () => import('../views/admin/ProfilePage.vue')
+
+const ProductView = () => import('../views/admin/ProductView.vue')
+
+const BannerView = () => import('../views/admin/BannerView.vue')
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes: [

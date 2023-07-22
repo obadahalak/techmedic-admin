@@ -29,6 +29,7 @@ export const useAuth = defineStore('auth', {
      
       http.post('/admin/update', data).then((response) => {
         this.token = response.data.data.token
+        //  you dont use token 
         localStorage.setItem('token', this.token)
         router.push('/company');
       });

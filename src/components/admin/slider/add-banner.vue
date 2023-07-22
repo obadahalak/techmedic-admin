@@ -29,22 +29,24 @@ function save() {
         });
     }
     banner.store(data);
+    document.getElementById('form').reset();  
 }
 </script>
 <template>
     <div class="">
         <addForm :store="banner" mode="banners">
             <template #inputs>
-
-               
-                <div class="my-10">
+                <form id="form" @submit.prevent="save">
+                    
+                    <div class="my-10">
                     <p>banner images:</p>
                     <input multiple class="p-2 rounded-md w-1/2" id="image" @change="uploadImage" type="file">
                 </div>
 
                 <div>
-                    <button @click="save" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
+                    <button type="submit" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
                 </div>
+            </form>
             </template>
         </addForm>
 

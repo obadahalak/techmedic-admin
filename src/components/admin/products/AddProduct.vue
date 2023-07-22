@@ -42,6 +42,7 @@ function save() {
         form.append('company_id', company_id.value);
 
         productStore.store(form);
+        document.getElementById('form').reset();  
     }
 }
 </script>
@@ -50,9 +51,9 @@ function save() {
         <addForm :store="productStore" mode="product">
             <template #inputs>
 
-
-                <div class="my-6 flex gap-5">
-                    <div>
+                <form id="form" @submit.prevent="save">
+                    <div class="my-6 flex gap-5">
+                        <div>
 
                         <p> name:</p>
                         <input class="mt-2 w-full rounded-md " type="text" v-model="name" placeholder="enter product name">
@@ -68,7 +69,7 @@ function save() {
                 </div>
                 <div class="my-6">
                     <div>
-
+                        
                         <p> description:</p>
                         <input class="mt-2 w-full rounded-md " type="text" v-model="description"
                             placeholder="enter product description">
@@ -77,37 +78,38 @@ function save() {
 
                 <div class="my-6 flex justify-between gap-5">
                     <div>
-
+                        
                         <p> select Category: </p>
                         <select class="mt-2 w-full rounded-md" v-model="category_id">
-
+                            
                             <option  class="p-2 bg-slate-50 border-2 " :value="category.id"
-                                v-for="category in categoryStore.data">
-                                {{ category.category_name }}
+                            v-for="category in categoryStore.data">
+                            {{ category.category_name }}
                             </option>
                         </select>
                     </div>
 
                     <div>
-
+                        
                         <p> select Company: </p>
                         <select class="mt-2 w-full rounded-md" v-model="company_id">
                             <option class="p-2 bg-slate-50 border-2 " :value="company.id"
-                                v-for="company in companyStore.data">
-                                {{ company.name }}
-                            </option>
-                        </select>
-                    </div>
+                            v-for="company in companyStore.data">
+                            {{ company.name }}
+                        </option>
+                    </select>
                 </div>
-                <div class="my-6">
-                    <p> images:</p>
-                    <input class="p-2 rounded-md w-1/2" id="image" multiple @change="uploadImage" type="file">
-                </div>
-
-                <div>
-                    <button @click="save" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
-                </div>
-            </template>
+            </div>
+            <div class="my-6">
+                <p> images:</p>
+                <input class="p-2 rounded-md w-1/2" id="image" multiple @change="uploadImage" type="file">
+            </div>
+            
+            <div>
+                <button type="submit" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
+            </div>
+        </form>
+        </template>
         </addForm>
 
     </div>

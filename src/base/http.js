@@ -96,7 +96,7 @@ createInstance.interceptors.response.use(function (response) {
 
 
 }, function (error) {
-   
+///here you can catch errors 
     useGlobal().setloading(false);
     return Promise.reject(error);
 });

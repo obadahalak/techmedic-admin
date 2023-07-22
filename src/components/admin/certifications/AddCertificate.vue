@@ -23,6 +23,7 @@ function save() {
         data.append('image', image.value);
         data.append('description', description.value);
         certificate.store(data);
+        document.getElementById('form').reset();
     }
 }
 </script>
@@ -30,10 +31,10 @@ function save() {
     <div class="">
         <addForm :store="certificate" mode="certificate">
             <template #inputs>
-
-                <div class="my-10">
-                    <p> title:</p>
-                    <input class="mt-2 w-full rounded-md " type="text" v-model="title" placeholder="enter  name">
+                <form id="form" @submit.prevent="save" >
+                    <div class="my-10">
+                        <p> title:</p>
+                        <input class="mt-2 w-full rounded-md " type="text" v-model="title" placeholder="enter  name">
                 </div>
                 <div class="my-10">
                     <p> descrption:</p>
@@ -46,8 +47,9 @@ function save() {
                 </div>
 
                 <div>
-                    <button @click="save" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
+                    <button type="submit" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
                 </div>
+            </form>
             </template>
         </addForm>
 

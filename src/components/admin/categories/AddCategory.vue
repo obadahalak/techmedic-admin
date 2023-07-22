@@ -22,6 +22,7 @@ function save() {
         data.append('company_id', company_id.value);
 
         category.store(data);
+        document.getElementById('form').reset();
     }
 }
 </script>
@@ -29,23 +30,24 @@ function save() {
     <div class="">
         <addForm :store="category" :mode="'category'">
             <template #inputs>
-
-                <div class="my-10">
-                    <p>catgory name:</p>
+                <form id="form" @submit.prevent="save">
+                    <div class="my-10">
+                        <p>catgory name:</p>
                     <input class="mt-2 w-full rounded-md " type="text" v-model="name" placeholder="enter company name">
                 </div>
                 <div class="my-10">
                     <p> select Category: </p>
                     <select class="mt-2 w-full rounded-md" v-model="company_id">
                         <option class="p-2 bg-slate-50 border-2 " :value="company.id" v-for="company in companyStore.data">
-                            {{ company.name }}
+                           <span >  {{ company.name }}</span>
                         </option>
                     </select>
                 </div>
 
                 <div>
-                    <button @click="save" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
+                    <button type="submit" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
                 </div>
+            </form>
             </template>
         </addForm>
 
