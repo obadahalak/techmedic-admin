@@ -97,11 +97,10 @@ function submit() {
                <td class="px-6 py-4">
                   {{ data.name }}
                </td>
-               <td class="px-6 py-4  w-60 h-40  ">
-                  <p class="text-start  w-60 h-40 overflow-y-auto ">
-                     {{ data.description }}
-                  </p>
+               <td class="px-6 py-4 max-h-40 overflow-y-auto max-w-sm">
+                  {{ data.description }}
                </td>
+              
 
                <td class="px-6 py-4">
                   {{ data.price }}

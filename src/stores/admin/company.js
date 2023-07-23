@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import http from '@/base/http.js';
+import { useCategory } from "./category";
+
 export const useCompany = defineStore('company', {
     state: () => ({
         error: '',
@@ -30,6 +32,7 @@ export const useCompany = defineStore('company', {
                 .then((response) => {
                   
                     this.data = response.data.data;
+                    useCategory().all(this.data[0].id);
                 }).catch((error) => {
                     this.error = error.response.data.errors;
                 });

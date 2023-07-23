@@ -8,6 +8,7 @@ const createInstance = axios.create({
  
     headers: {
         'Accept': 'application/json',
+        'Content-Type':'multipart/form-data'
     },
  
     validateStatus: function (status) {

@@ -5,6 +5,9 @@ import {useCompany} from '@/stores/admin/company.js';
 import { onMounted } from 'vue';
 import { useCategory } from '../../stores/admin/category';
 import { useProduct } from '../../stores/admin/product';
+const CategoryStore=useCategory();
+const CompanyStore=useCompany();
+
 onMounted(()=>{
    
     useCompany().all();

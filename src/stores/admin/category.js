@@ -42,7 +42,7 @@ export const useCategory = defineStore('category', {
             console.log(id);
             http.get(`/admin/categories/all/?company_id=${id}`)
                 .then((response) => {
-                    console.log(response);
+                    
                     this.data = response.data.data;
                 }).catch((error) => {
                     this.error = error.response.data.errors;
