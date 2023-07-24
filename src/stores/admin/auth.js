@@ -28,7 +28,8 @@ export const useAuth = defineStore('auth', {
     update(data) {
      
       http.post('/admin/update', data).then((response) => {
-
+        localStorage.setItem('email',data.get('email'));
+      
         router.push('/company');
       });
     }

@@ -15,11 +15,14 @@ const ProductView = () => import('../views/admin/ProductView.vue')
 
 const BannerView = () => import('../views/admin/BannerView.vue')
 
+const NotFound = () => import('../views/admin/NotFoundView.vue');
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-   
+
+
     {
       path: '/login',
       name: 'login',
@@ -55,7 +58,18 @@ const router = createRouter({
       name: 'profile',
       component: ProfilePage
     },
-  
+    {
+      path:  '/:pathMatch(.*)*',
+      redirect: '/page-not-found'
+    },
+
+    {
+      path: '/page-not-found',
+      name: 'page-not-found',
+      component: NotFound
+    },
+
+
   ]
 })
 

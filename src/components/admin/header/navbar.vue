@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import router from '../../../router';
-let current_route = ref();
+import { useRouter } from 'vue-router';
+const router = useRouter();
 let routes = ref([
     {
         'name': 'Companies',
@@ -35,6 +35,7 @@ let routes = ref([
     },
 ]);
 
+
 function push(route) {
 
     routes.value.map((r) => {
@@ -46,6 +47,7 @@ function push(route) {
             r.active = false;
     });
 }
+
 </script>
 
 <template>
@@ -54,8 +56,8 @@ function push(route) {
             class="flex  overflow-x-auto lg:justify-around md:justify-around sm:justify-around list-none p-4 border-b-2 border-gray-700 bg-slate-100">
 
             <li v-for="route in routes" @click="push(route.name)"
-                :class="{ 'bg-gray-700 rounded-md text-white font-bold': route.active }"
-                class="  p-2 cursor-pointer hover:text-bold hover:text-lg hover:shadow-sm">
+                :class="{ 'bg-gray-700 rounded-md  text-white font-bold': route.path==router.currentRoute.value.name}"
+                class=" border-l-md p-2 cursor-pointer hover:text-bold hover:text-lg hover:shadow-sm">
                 <span>{{ route.name }} </span>
             </li>
         </nav>
