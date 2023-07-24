@@ -35,7 +35,7 @@ export const useBanner = defineStore('banner', {
         getAll() {
             http.get(`/slider-images?page=${this.meta.current_page}`)
                 .then((response) => {
-                
+                    
                     this.data = response.data.data;
                 });
         },

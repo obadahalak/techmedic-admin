@@ -9,6 +9,7 @@ const baseImageUrl = import.meta.env.VITE_BASE_URL_IMAGE;
 const banner = useBanner();
 
 const columns = ref();
+let showModal=ref(false);
 let type=ref();
 onMounted(() => {
     columns.value = ref(banner.data);
@@ -21,9 +22,7 @@ function showBaseModal(id,getType) {
 
     banner.get(id);
 
-    window.scrollTo(0, 0);
-
-    document.getElementById('BaseModal').classList.remove('hidden');
+    showModal.value=true;
 }
 
 function submit() {
@@ -32,16 +31,18 @@ function submit() {
 
     if (banner.status != 422 || banner.status != 404) {
 
-        document.getElementById('BaseModal').classList.add('hidden');
+        showModal.value=false;
+        
     }
 
 }
 
 </script>
 <template>
+ 
     <div v-if="banner.data.length > 0">
 
-        <BaseModal class="z-20 absolute  " :title="'banner'" :type="type" >
+        <BaseModal id="BaseModal" class="z-20 fixed  bg-red-700 " :class="{'hidden':!showModal}" :status="showModal"  :title="'banner'" :type="type" >
             <template #form>
 
                 <form class="flex flex-col">
@@ -61,6 +62,7 @@ function submit() {
             </template>
         </BaseModal>
 
+
         <BaseTable :keys="banner.data[0]">
 
             <template #body>
@@ -73,7 +75,7 @@ function submit() {
                     </th>
 
                     <td class="px-6 py-4 flex">
-                        <img class="lg:w-60 lg:h-60 w-20 mx-auto" :src="`${baseImageUrl}${data.image}`" alt="">
+                        <img class="lg:w-60 lg:h-60 w-20 mx-auto" :src="`${data.image}`" alt="">
                     </td>
 
                     <td class="px-6 py-4  ">
