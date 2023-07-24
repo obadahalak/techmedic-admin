@@ -1,45 +1,63 @@
+<script setup>
+import { ref } from 'vue';
+import router from '../../../router';
+let current_route = ref();
+let routes = ref([
+    {
+        'name': 'Companies',
+        'path': 'company',
+        'active': false,
+    },
+    {
+        'name': 'Categories',
+        'path': 'category',
+        'active': false,
+    },
+    {
+        'name': 'Certificates',
+        'path': 'certificate',
+        'active': false,
+    },
+    {
+        'name': 'Products',
+        'path': 'product',
+        'active': false,
+    },
+    {
+        'name': 'Banners',
+        'path': 'banner',
+        'active': false,
+    },
+    {
+        'name': 'Profile',
+        'path': 'profile',
+        'active': false,
+    },
+]);
+
+function push(route) {
+
+    routes.value.map((r) => {
+        if (r.name == route) {
+            router.push(r.path);
+            r.active = true;
+        } else
+
+            r.active = false;
+    });
+}
+</script>
+
 <template>
-    
     <div>
-        <nav class="flex  overflow-x-auto lg:justify-around md:justify-around sm:justify-around list-none p-4 border-b-2 border-gray-700 bg-slate-100">
-            <router-link :to="{ name: 'company' }">
-                <li class="  p-2 cursor-pointer hover:text-bold hover:text-lg hover:shadow-sm">
-                    <span>company</span>
-                </li>
-            </router-link>
-            <router-link :to="{ name: 'category' }">
+        <nav
+            class="flex  overflow-x-auto lg:justify-around md:justify-around sm:justify-around list-none p-4 border-b-2 border-gray-700 bg-slate-100">
 
-                <li class="mx-2 p-2 cursor-pointer hover:font-bold hover:text-lg hover:shadow-sm">
-                    <span>cattegory</span>
-                </li>
-            </router-link>
-            <router-link :to="{ name: 'certificate' }">
-
-                <li class="mx-2 p-2 cursor-pointer hover:font-bold hover:text-lg hover:shadow-sm">
-                    <span>certificate</span>
-                </li>
-            </router-link>
-
-            <router-link :to="{ name: 'product' }">
-
-                <li class="mx-2 p-2 cursor-pointer hover:font-bold hover:text-lg hover:shadow-sm">
-                    <span>product</span>
-                </li>
-            </router-link>
-
-            <router-link :to="{ name: 'banner' }">
-
-                <li class="mx-2 p-2 cursor-pointer hover:font-bold hover:text-lg hover:shadow-sm">
-                    <span>banner</span>
-                </li>
-            </router-link>
-
-            <router-link :to="{ name: 'profile' }">
-
-                <li class=" text-white  bg-gray-700 rounded-md p-2 cursor-pointer hover:font-bold hover:text-lg hover:shadow-sm">
-                    <span>profile</span>
-                </li>
-            </router-link>
+            <li v-for="route in routes" @click="push(route.name)"
+                :class="{ 'bg-gray-700 rounded-md text-white font-bold': route.active }"
+                class="  p-2 cursor-pointer hover:text-bold hover:text-lg hover:shadow-sm">
+                <span>{{ route.name }} </span>
+            </li>
         </nav>
     </div>
-</template>
+</template>	
