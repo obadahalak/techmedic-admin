@@ -1,8 +1,8 @@
 <script setup>
 import { useCompany } from '@/stores/admin/company.js'
 import { ref, watch } from 'vue';
-
-const props = defineProps(['type','title','status']);
+const emit=defineEmits(['chnageStatus']);
+const props = defineProps(['type', 'title', 'status']);
 
 
 const company = useCompany();
@@ -21,15 +21,15 @@ watch(() => props.status, (new_value) => {
 
 
 function close() {
-  status.value=false;
+  status.value = false;
+  emit('chnageStatus',status.value);  
 }
 
 
 
 </script>
 <template>
-  
-  <div id="modal"  v-bind="$attrs" :class="{'hidden':!status}" class=" z-10 inset-0 overflow-y-auto">
+  <div id="modal" v-bind="$attrs" :class="{ 'hidden': !status }" class=" fixed z-10 inset-0 overflow-y-auto">
     <div class=" bg-gray-700 flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity">
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -55,7 +55,7 @@ function close() {
                 <slot name="form">
 
                 </slot>
-                
+
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@ function close() {
         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
           <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
             <slot name="btn_from"></slot>
-           
+
           </span>
           <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
             <button type="button"

@@ -6,10 +6,10 @@ import BaseModal from '@/components/base/BaseModal.vue'
 import { onMounted, ref } from 'vue';
 import { useCertificate } from '../../../stores/admin/certificate';
 
-const baseImageUrl=import.meta.env.VITE_BASE_URL_IMAGE;
 const certificate = useCertificate();
 let type = ref();
 const columns = ref();
+let showModal = ref(false);
 onMounted(() => {
 
   columns.value = ref(certificate.data);
@@ -17,18 +17,17 @@ onMounted(() => {
 function showBaseModal(id, getType) {
   type.value = getType;
   certificate.get(id);
-  window.scrollTo(0, 0);
-  document.getElementById('BaseModal').classList.remove('hidden');
+  showModal.value = ! showModal.value;
 }
 function submit() {
 
- 
-    certificate.delete(certificate.item.id);
 
-    if (certificate.status != 422 || certificate.status != 404) {
+  certificate.delete(certificate.item.id);
 
-      document.getElementById('BaseModal').classList.add('hidden');
-    }
+  if (certificate.status != 422 || certificate.status != 404) {
+    showModal.value = ! showModal.value;
+
+  }
 
 }
 
@@ -37,7 +36,7 @@ function submit() {
   <div v-if="certificate.data.length > 0">
 
 
-    <BaseModal class="z-20 absolute  " :type="type" :mode="'company'">
+    <BaseModal  @chnageStatus="(s)=>showModal=s" :class="{ 'hidden': !showModal }" :status="showModal" :type="type" :mode="'company'">
       <template #form>
 
         <form class="flex flex-col">
@@ -74,9 +73,9 @@ function submit() {
             {{ data.title }}
           </td>
           <td class="px-6 py-4 flex">
-            <img class="lg:w-60 lg:h-60 w-20 mx-auto" :src="`${baseImageUrl}${data.image}`" alt="">
+            <img class="lg:w-60 lg:h-60 w-20 mx-auto" :src="`${data.image}`" alt="">
 
-           
+
           </td>
           <td class="px-6 py-4">
             {{ data.description }}
@@ -85,7 +84,7 @@ function submit() {
 
           <td class="px-6 py-4  ">
 
-           
+
             <button @click="showBaseModal(data.id, 'delete')"
               class=" lg:mx-4 mx-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 w-20 my-1 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">

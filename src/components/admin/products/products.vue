@@ -10,6 +10,7 @@ const product = useProduct();
 
 let type = ref();
 const columns = ref();
+let showModal =ref();
 
 onMounted(() => {
    columns.value = ref(product.data);
@@ -23,7 +24,7 @@ function showBaseModal(id, getType) {
    product.get(id);
 
 
-   document.getElementById('modal').classList.remove('hidden');
+   showModal.value=!showModal.value;
 }
 
 function submit() {
@@ -32,14 +33,14 @@ function submit() {
 
         if (product.status != 422 || product.status != 404) {
 
-            document.getElementById('BaseModal').classList.add('hidden');
+         showModal.value=!showModal.value;
         }
     } else {
         product.delete(product.item.id);
 
         if (product.status != 422 || product.status != 404) {
 
-            document.getElementById('BaseModal').classList.add('hidden');
+         showModal.value=!showModal.value;
         }
 
     }
@@ -50,7 +51,7 @@ function submit() {
 <template>
    <div v-if="product.data.length > 0">
 
-      <BaseModal class="z-20 fixed  " :type="type" :mode="'product'">
+      <BaseModal @chnageStatus="(s)=>showModal=s" :class="{ 'hidden': !showModal }" :status="showModal" :type="type" :mode="'product'">
          <template #form>
 
             <form class="flex flex-col">

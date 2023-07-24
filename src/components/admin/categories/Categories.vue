@@ -11,6 +11,7 @@ import { onMounted, ref } from 'vue';
 const category = useCategory();
 let type = ref();
 const columns = ref();
+let showModal=ref(false);
 onMounted(() => {
 
     columns.value = ref(category.data);
@@ -18,8 +19,7 @@ onMounted(() => {
 function showBaseModal(id, getType) {
     type.value = getType;
     category.get(id);
-    window.scrollTo(0, 0);
-    document.getElementById('BaseModal').classList.remove('hidden');
+    showModal.value=!showModal.value;
 }
 function submit() {
 
@@ -28,14 +28,14 @@ function submit() {
 
         if (category.status != 422 || category.status != 404) {
 
-            document.getElementById('BaseModal').classList.add('hidden');
+            showModal.value=!showModal.value;
         }
     } else {
         category.delete(category.item.id);
 
         if (category.status != 422 || category.status != 404) {
 
-            document.getElementById('BaseModal').classList.add('hidden');
+            showModal.value=!showModal.value;
         }
 
     }
@@ -47,7 +47,7 @@ function submit() {
     <div v-if="category.data.length > 0">
 
 
-        <BaseModal class="z-20 absolute  " :type="type" :mode="'company'">
+        <BaseModal @chnageStatus="(s)=>showModal=s" :class="{ 'hidden': !showModal }" :status="showModal" :type="type" :mode="'company'">
             <template #form>
 
                 <form class="flex flex-col">

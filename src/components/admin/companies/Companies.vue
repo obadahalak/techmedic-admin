@@ -12,6 +12,7 @@ const company = useCompany();
 let type = ref();
 let logo = ref();
 const columns = ref();
+let showModal = ref(false);
 
 onMounted(() => {
     columns.value = ref(company.data);
@@ -22,14 +23,13 @@ function uploadLogo(event) {
 }
 
 function showBaseModal(id, getType) {
-   
+
     type.value = getType;
-   
+
     company.get(id);
-   
-    window.scrollTo(0, 0);
-   
-    document.getElementById('BaseModal').classList.remove('hidden');
+
+
+    showModal.value = !showModal.value;
 }
 
 function submit() {
@@ -38,14 +38,14 @@ function submit() {
 
         if (company.status != 422 || company.status != 404) {
 
-            document.getElementById('BaseModal').classList.add('hidden');
+            showModal.value = !showModal.value;
         }
     } else {
         company.delete(company.item.id);
 
         if (company.status != 422 || company.status != 404) {
 
-            document.getElementById('BaseModal').classList.add('hidden');
+            showModal.value = !showModal.value;
         }
 
     }
@@ -56,7 +56,7 @@ function submit() {
 <template>
     <div v-if="company.data.length > 0">
 
-        <BaseModal class="z-20 absolute  " :type="type" :mode="'company'">
+        <BaseModal @chnageStatus="(s)=>showModal=s" :class="{ 'hidden': !showModal }" :status="showModal" :type="type" :mode="'company'">
             <template #form>
 
                 <form class="flex flex-col">
@@ -77,9 +77,7 @@ function submit() {
 
                         <div class="mb-4">
                             <label for="logo" class="block text-gray-700 font-bold mb-2">Logo:</label>
-                            <input type="file" class="shadow appearance-none border rounded w-full
-                            py-2 px-3 text-gray-700 leading-tight 
-                            focus:outline-none focus:shadow-outline" @change="uploadLogo"
+                            <input type="file" class="upload_image" @change="uploadLogo"
                                 placeholder="upload new logo">
                         </div>
                     </div>
@@ -97,7 +95,7 @@ function submit() {
         <BaseTable :keys="company.data[0]">
 
             <template #body>
-              
+
                 <tr v-for="data in company.data"
                     class="bg-slate-100 border-b dark:bg-gray-800 dark:border-gray-700  dark:hover:bg-gray-600">
 

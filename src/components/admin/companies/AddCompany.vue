@@ -37,6 +37,12 @@ function save() {
 
                     </div>
                     <div class="my-10">
+
+                        <input type="file" class="upload_image" @change="uploadLogo"
+                            placeholder="upload new logo">
+
+                    </div>
+                    <div class="my-10">
                         <p>company image:</p>
                         <input class="p-2 rounded-md w-1/2" id="image" @change="uploadImage" type="file">
                     </div>
