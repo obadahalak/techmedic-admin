@@ -22,9 +22,9 @@ export const useBanner = defineStore('banner', {
 
 
             http.post('admin/slider-images/', data).then((response) => {
-
+                // base=import.meta.env.VITE_BASE_URL_IMAGE};
                 response.data.data.map((b)=>{
-                    this.data.unshift({'id':b.id,'image':b.path});
+                    this.data.unshift({'id':b.id,'image':import.meta.env.VITE_BASE_URL_IMAGE . b.path});
                 });
              
             }).catch((error) => {

@@ -1,5 +1,8 @@
 import axios from "axios";
 import Notify from 'simple-notify'
+import { pushNotify } from "../components/base/useNotify";
+// import { notify } from "@kyvg/vue3-notification";
+
 import { useGlobal } from '@/stores/global';
 import router from "../router";
 
@@ -12,16 +15,9 @@ const createInstance = axios.create({
     },
  
     validateStatus: function (status) {
+        
         if (status === 201) {
-            return new Notify({
-                status: 'success',
-                title: '',
-                text: 'add successfully',
-                effect: 'slide',
-                type: 3,
-                'autoclose':true,
-                autotimeout: 1000,
-            });
+            return pushNotify('success','added successfully');
         }
         
        
@@ -31,42 +27,15 @@ const createInstance = axios.create({
        
     
         if (status >= 500 && status  <600) {
-            return new Notify({
-                status: 'error',
-                title: 'error',
-                text: 'server under maintennace',
-                effect: 'slide',
-                type: 3,
-                'autoclose':true,
-                autotimeout: 1000,
-            });
+            return pushNotify('error','500','error from server')
         }
         if(status===404){
-          return     new Notify({
-                status: 'error',
-                title: 'Not found',
-                text: 'certifiacte not found ',
-                effect: 'slide',
-                'autoclose':true,
-                autotimeout: 1000,
-                type: 3
-            });  
-            
-            
-           
+            return  pushNotify('error','404','not found')
         }
 
         if(status===401){
-            new Notify({
-              status: '401',
-              title: 'Not authorize',
-              text: 'please login to authorize ',
-              effect: 'slide',
-              'autoclose':true,
-              autotimeout: 1000,
-              type: 3
-          }); 
-          return router.push('/login'); 
+              pushNotify('warning','401','Unathorize, login please')
+             return router.push('/login'); 
         }
        
 

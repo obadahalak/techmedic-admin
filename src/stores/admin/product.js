@@ -55,8 +55,9 @@ export const useProduct = defineStore('product', {
                     this.status = response.status;
 
                     let item = this.data.find((d) => d.id == this.item.id);
-                    item.name = response.data.data.name;
-                    item.logo = response.data.data.logo;
+                    // console.log(response.data.data);
+                    // item.name = response.data.data.name;
+                    // item.logo = response.data.data.logo;
 
 
                 }).catch((error) => {

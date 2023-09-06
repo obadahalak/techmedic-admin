@@ -1,7 +1,7 @@
 <script setup>
 import { useCategory } from "../../../stores/admin/category";
 import { useCompany } from "../../../stores/admin/company";
-
+import { isEmpty } from '@/composables/isEmpty.js'
 import addForm from "../../base/AddForm.vue";
 import BaseInput from "../../base/BaseInput.vue";
 import { ref } from "vue";
@@ -14,12 +14,19 @@ let company_id = ref();
 
 
 function save() {
+    
+    if (!isEmpty(company_id.value)) {
 
-    category.store({
-        'name': name.value,
-        'company_id': company_id.value,
-    });
-    document.getElementById('form').reset();
+
+        category.store({
+            'name': name.value,
+            'company_id': company_id.value,
+        });
+        name.value=null;
+        company_id.value="def";
+        // document.getElementById('form').(); 
+    }
+
 
 }
 
