@@ -1,23 +1,16 @@
 <script setup>
-import addBanner from '../../components/admin/slider/add-banner.vue';
-import banners from '../../components/admin/slider/banners.vue';
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
+import { useBanner } from '@/stores/admin/banner'
+import AddBanner from '@/components/admin/slider/AddBanner.vue'
+import Banners from '@/components/admin/slider/Banners.vue'
 
-import { useBanner } from '../../stores/admin/banner';
 onMounted(() => {
-
-
-    useBanner().getAll();
-});
+  useBanner().getAll()
+})
 </script>
 
 <template>
-    <div class="">
+  <AddBanner />
 
-
-        <addBanner />
-
-        <banners />
-
-    </div>
+  <Banners />
 </template>

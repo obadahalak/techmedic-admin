@@ -1,58 +1,53 @@
 <script setup>
-import { useAuth } from "@/stores/admin/auth.js";
-import addForm from "@/components/base/AddForm.vue";
+import { ref } from 'vue'
+import { useAuth } from '@/stores/admin/auth.js'
+import BaseInput from '@/components/base/BaseInput.vue'
+import AddForm from '@/components/base/AddForm.vue'
 
-import BaseInput from "@/components/base/BaseInput.vue";
-import { isEmpty } from '@/composables/isEmpty.js'
-import { ref } from "vue";
-const auth = useAuth();
+const authStore = useAuth()
 
-
-let email = ref(localStorage.getItem('email'));
-
-let password = ref();
-
-
+const authForm = ref({
+  email: '',
+  password: '',
+})
 
 function save() {
-
-    let data = new FormData();
-  
-    if (!isEmpty(email.value)) {
-
-        data.append('email', email.value);
-    }
-    if (!isEmpty(password.value)) {
-
-        data.append('password', password.value);
-    }
-    auth.update(data);
-    
+  authStore.update(authForm.value)
 }
 </script>
+
 <template>
-    <div class="">
-     
-        <addForm :store="auth" :mode="'update-profile'">
-            <template #inputs>
+  <div class="">
+    <AddForm
+      :store="authStore"
+      mode="update-profile"
+      @submit.prevent="save"
+    >
+      <template #inputs>
+        <div class="my-10">
+          <BaseInput
+            v-model="authForm.email"
+            type="input"
+            label="update your email"
+          />
+        </div>
 
-                <div class="my-10">
-                    <BaseInput :type="'input'" v-model="email" :label="'update your email'"/>
-                    <!-- <p>email:</p>
+        <div class="my-10">
+          <BaseInput
+            v-model="authForm.password"
+            type="input"
+            label="update your password"
+          />
+        </div>
 
-                    <input class="mt-2 w-full rounded-md " type="text" v-model="email" placeholder="enter your  email"> -->
-                </div>
-
-                <div class="my-10">
-                    <BaseInput :type="'input'" v-model="password" :label="'update your password'"/>
-                </div>
-
-                <div>
-                    <button @click="save" class="p-2 w-full bg-gray-900 text-white rounded-md">Save</button>
-                </div>
-            </template>
-        </addForm>
-        <p>asd</p>
-
-    </div>
+        <div>
+          <button
+            class="p-2 w-full bg-gray-900 text-white rounded-md"
+          >
+            Save
+          </button>
+        </div>
+      </template>
+    </AddForm>
+  </div>
 </template>

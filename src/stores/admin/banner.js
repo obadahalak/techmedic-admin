@@ -1,59 +1,50 @@
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import http from '@/base/http.js'
 
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
+export const useBanner = defineStore('banner', () => {
+  const error = ref([])
+  const data = ref([])
+  const item = ref({})
+  const meta = ref({
+    current_page: 1,
+    last_page: 1,
+  })
 
-export const useBanner = defineStore('banner', {
+  function store(banner) {
+    http.post('admin/slider-images/', banner).then((response) => {
+      response.data.map((b) => {
+        return data.value.unshift({ id: b.id, src: `${import.meta.env.VITE_BASE_URL_IMAGE}${b.path}` })
+      })
+    }).catch((err) => {
+      error.value = err.errors
+    })
+  }
 
-    state: () => ({
-        error: '',
-        data: [],
-        item: {},
-        meta: {
-            current_page: 1,
-            last_page: 1,
-        },
-        status: null,
-    }),
+  function getAll() {
+    http.get(`/slider-images?page=${meta.value.current_page}`)
+      .then((response) => {
+        data.value = response.data
+      })
+  }
 
-    actions: {
+  function get(id) {
+    item.value = data.value.find(d => d.id === id)
+  }
 
+  async function destroy() {
+    return await http.delete(`/admin/slider-images/${item.value.id}`).then((response) => {
+      data.value.splice(data.value.indexOf(data.value.find(d => d.id === item.value.id)), 1)
 
-        store(data) {
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
+      return err
+    })
+  }
 
-            http.post('admin/slider-images/', data).then((response) => {
-                // base=import.meta.env.VITE_BASE_URL_IMAGE};
-                response.data.data.map((b)=>{
-                    this.data.unshift({'id':b.id,'image':import.meta.env.VITE_BASE_URL_IMAGE . b.path});
-                });
-             
-            }).catch((error) => {
-                this.error = error.response.data.errors;
-            });
-        },
+  return { data, item, error, meta, getAll, store, get, destroy }
+},
 
-        getAll() {
-            http.get(`/slider-images?page=${this.meta.current_page}`)
-                .then((response) => {
-                    
-                    this.data = response.data.data;
-                });
-        },
-
-        get(id) { this.item = this.data.find((d) => d.id == id); },
-
-        delete(id) {
-            http.delete(`/admin/slider-images/${id}`).then((response) => {
-                this.status = response.status;
-                this.data.splice(this.data.indexOf(this.data.find((d) => d.id == id)), 1);
-            }).catch((error) => {
-                this.error = error.response.data.errors;
-            });
-        },
-
-    
-
-    },
-
-
-});
+)

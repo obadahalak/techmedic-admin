@@ -1,18 +1,12 @@
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const useGlobal = defineStore('global',  {
-    state: () => ({ 
-        loading:false,
-        auth:false,
-    }),
-   
-    actions: {
-  
-        setloading(value){
-            this.loading = value;
-        },
-      
-        
-    },
+export const useGlobal = defineStore('global', () => {
+  const loading = ref(false)
+
+  function setloading(value) {
+    loading.value = value
+  }
+
+  return { setloading, loading }
 })

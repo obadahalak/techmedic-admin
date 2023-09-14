@@ -1,30 +1,21 @@
 <script setup>
-import AddProduct from '../../components/admin/products/AddProduct.vue';
-import Products from '../../components/admin/products/products.vue';
-import {useCompany} from '@/stores/admin/company.js';
-import { onMounted } from 'vue';
-import { useCategory } from '../../stores/admin/category';
-import { useProduct } from '../../stores/admin/product';
-const CategoryStore=useCategory();
-const CompanyStore=useCompany();
+import { onMounted } from 'vue'
+import AddProduct from '@/components/admin/products/AddProduct.vue'
+import Products from '@/components/admin/products/products.vue'
+import { useProduct } from '@/stores/admin/product'
+import { useCompany } from '@/stores/admin/company.js'
 
-onMounted(()=>{
-   
-    useCompany().all();
-    // useCategory().all();
-    useProduct().getAll();
-});
+onMounted(() => {
+  useCompany().all()
+
+  useProduct().getAll()
+})
 </script>
 
 <template>
+  <div class="">
+    <AddProduct />
 
-<div class="">
-
-    
-    <AddProduct/>
-    
-    <Products/>
-    
-</div>
-
+    <Products />
+  </div>
 </template>

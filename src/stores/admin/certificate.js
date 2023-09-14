@@ -1,65 +1,66 @@
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
-export const useCertificate = defineStore('certificate', {
-    state: () => ({
-        error: '',
-        data: [],
-        item: {},
-        meta: {
-            current_page: 1,
-            last_page: 1,
-        },
-        status: null,
-    }),
-    actions: {
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import http from '@/base/http.js'
 
+export const useCertificate = defineStore('certificate', () => {
+  const error = ref([])
+  const data = ref([])
+  const item = ref({})
+  const meta = ref({
+    current_page: 1,
+    last_page: 1,
+  })
 
-        store(data) {
+  async function store(certificate) {
+    return await http.post('admin/certificates', certificate).then((response) => {
+      data.value.unshift(response.data)
 
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
-            http.post('admin/certificates/', data).then((response) => {
-          
-                this.data.unshift(response.data.data);
-            }).catch((error)=>{
-                this.error=error.response.data.errors;
-            });
-        },
+      return err
+    })
+  }
 
-        getAll() {
-            http.get(`/certificates?page=${this.meta.current_page}`)
-                .then((response) => {
-                    this.meta = response.data.meta;
-                    this.data = response.data.data;
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
+  function getAll() {
+    http.get(`/certificates?page=${meta.value.current_page}`)
+      .then((response) => {
+        meta.value = response.meta
 
-        get(id) { this.item = this.data.find((d) => d.id == id); },
+        return data.value = response.data
+      }).catch((err) => {
+        error.value = err.errors
+      })
+  }
 
-    
-        delete(id) {
-            http.delete(`/admin/certificates/${id}`).then((response) => {
-                this.status = response.status;
-                this.data.splice(this.data.indexOf(this.data.find((d) => d.id == id)), 1);
-            }).catch((error) => {
-                this.error = error.response.data.errors;
-            });
-        },
-        nextPage() {
-            if (this.meta.current_page != this.meta.last_page) {
-                this.meta.current_page++
-                this.getAll();
-            }
-        },
-        prevPage() {
-            if (this.meta.current_page != 1) {
-                this.meta.current_page--
-                this.getAll();
-            }
-        },
+  function get(id) {
+    item.value = data.value.find(d => d.id === id)
+  }
 
-    },
+  async function destroy() {
+    return await http.delete(`/admin/certificates/${item.value.id}`).then((response) => {
+      data.value.splice(data.value.indexOf(data.value.find(d => d.id === item.value.id)), 1)
 
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
-});
+      return err
+    })
+  }
+  function nextPage() {
+    if (meta.value.current_page !== meta.value.last_page) {
+      meta.value.current_page++
+      getAll()
+    }
+  }
+  function prevPage() {
+    if (meta.value.current_page !== 1) {
+      meta.value.current_page--
+      getAll()
+    }
+  }
+
+  return { data, item, error, meta, getAll, store, get, destroy, nextPage, prevPage }
+})

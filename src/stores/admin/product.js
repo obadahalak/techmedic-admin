@@ -1,91 +1,84 @@
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
-export const useProduct = defineStore('product', {
-    state: () => ({
-        error: '',
-        data: [],
-        item: {},
-        meta: {
-            current_page: 1,
-            last_page: 1,
-        },
-        status: null,
-    }),
-    actions: {
+/* eslint-disable prefer-const */
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import http from '@/base/http.js'
 
+export const useProduct = defineStore('product', () => {
+  const error = ref([])
+  let data = ref([])
+  const item = ref({})
+  const meta = ref({
+    current_page: 1,
+    last_page: 1,
+  })
 
-        store(data) {
+  async function store(product) {
+    return await http.post('admin/products', product).then((response) => {
+      const res = response.data
 
+      data.value.unshift({
+        id: res.id,
+        name: res.name,
+        description: res.description,
+        price: res.price,
+        image: res.images[0].src,
+        company: res.company.name,
+        category: res.category.name,
+      })
 
-            http.post('admin/products/', data).then((response) => {
-               
-                const data=response.data.data;
-                this.data.unshift({
-                'id':data.id,
-                'name':data.name,
-                'description':data.description,
-                'price':data.price,
-                'image':data.images[0].src,
-                'company':data.company.name,
-                'category':data.category.name
-            });
-            }).catch((error)=>{
-                this.error=error.response.data.errors;
-            });
-        },
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
-        getAll() {
-            http.get(`/products?page=${this.meta.current_page}`)
-                .then((response) => {
-                    this.meta = response.data.meta;
-                    this.data = response.data.data;
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
+      return err
+    })
+  }
 
-        get(id) { this.item = this.data.find((d) => d.id == id); },
+  function getAll() {
+    http.get(`/products?page=${meta.value.current_page}`)
+      .then((response) => {
+        meta.value = response.meta
+        data.value = response.data
+      }).catch((err) => {
+        error.value = err.errors
+      })
+  }
 
-        edit(data) {
+  function get(id) {
+    item.value = data.value.find(d => d.id === id)
+  }
 
-            http.post(`/admin/products/edit/${this.item.id}`, data)
-                .then((response) => {
+  async function edit(product) {
+    return await http.post(`/admin/products/edit/${item.value.id}`, { price: product }).then((response) => {
+      if (data.value.find(d => d.id === item.value.id))
+        item.value.price = product
 
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
-                    this.status = response.status;
+      return err
+    })
+  }
+  function destroy() {
+    http.delete(`/admin/products/${item.value.id}`).then((response) => {
+      data.value.splice(data.value.indexOf(data.value.find(d => d.id === item.value.id)), 1)
+    }).catch((err) => {
+      error.value = err.errors
+    })
+  }
+  function nextPage() {
+    if (meta.value.current_page !== meta.value.last_page) {
+      meta.value.current_page++
+      getAll()
+    }
+  }
+  function prevPage() {
+    if (meta.value.current_page !== 1) {
+      meta.value.current_page--
+      getAll()
+    }
+  }
 
-                    let item = this.data.find((d) => d.id == this.item.id);
-                    // console.log(response.data.data);
-                    // item.name = response.data.data.name;
-                    // item.logo = response.data.data.logo;
-
-
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
-        delete(id) {
-            http.delete(`/admin/products/${id}`).then((response) => {
-                this.status = response.status;
-                this.data.splice(this.data.indexOf(this.data.find((d) => d.id == id)), 1);
-            }).catch((error) => {
-                this.error = error.response.data.errors;
-            });
-        },
-        nextPage() {
-            if (this.meta.current_page != this.meta.last_page) {
-                this.meta.current_page++
-                this.getAll();
-            }
-        },
-        prevPage() {
-            if (this.meta.current_page != 1) {
-                this.meta.current_page--
-                this.getAll();
-            }
-        },
-
-    },
-
-
-});
+  return { data, item, error, meta, edit, getAll, store, get, destroy, nextPage, prevPage }
+})

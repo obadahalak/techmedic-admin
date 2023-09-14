@@ -1,96 +1,90 @@
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
-export const useCategory = defineStore('category', {
-    state: () => ({
-        error: '',
-        data: [],
-        item: {},
-        meta: {
-            current_page: 1,
-            last_page: 1,
-        },
-        status: null,
-    }),
-    actions: {
+/* eslint-disable prefer-const */
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import http from '@/base/http.js'
 
-        
-        store(data) {
+export const useCategory = defineStore('category', () => {
+  let error = ref([])
+  const data = ref([])
+  let item = ref({})
+  const meta = ref({
+    current_page: 1,
+    last_page: 1,
+  })
+  const status = ref(false)
 
-            
-            http.post('admin/categories/', data).then((response) => {
-               
-                this.data.unshift({
-                    'id':response.data.data.id, 
-                    'category_name':response.data.data.name,
-                    'company_name':response.data.data.company.name});
-            }).catch((error)=>{
-                this.error=error.response.data.errors;
-            });
-        },
+  function store(category) {
+    http.post('admin/categories', category).then((response) => {
+      data.value.unshift({
+        id: response.data.id,
+        category_name: response.data.name,
+        company_name: response.data.company.name,
+      })
+    }).catch((err) => {
+      error.value = err.errors
+    })
+  }
 
-        getAll() {
-            http.get(`/admin/categories/?page=${this.meta.current_page}`)
-                .then((response) => {
-                    this.meta = response.data.meta;
-                    this.data = response.data.data;
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
+  function getAll() {
+    http.get(`/admin/categories/?page=${meta.value.current_page}`)
+      .then((response) => {
+        meta.value = response.meta
+        data.value = response.data
+      }).catch((err) => {
+        error.value = err.errors
+      })
+  }
 
-        all(id){
-            console.log(id);
-            http.get(`/admin/categories/all/?company_id=${id}`)
-                .then((response) => {
-                    
-                    this.data = response.data.data;
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        }, 
-        
-        get(id) { this.item = this.data.find((d) => d.id == id); },
+  function all(id) {
+    http.get(`/admin/categories/all/?company_id=${id}`)
+      .then((response) => {
+        data.value = response.data
+      }).catch((err) => {
+        error.value = err.errors
+      })
+  }
 
-        edit(data) {
+  function get(id) {
+    item.value = data.value.find(d => d.id === id)
+  }
 
-            http.post(`/admin/categories/edit/${this.item.id}`, data)
-                .then((response) => {
+  async function edit(category_name) {
+    return await http.post(`/admin/categories/edit/${item.value.id}`, { name: category_name.value })
+      .then((response) => {
+        if (data.value.find(d => d.id === item.value.id))
 
+          item.value.category_name = response.data.name
 
-                    this.status = response.status;
+        return response
+      }).catch((err) => {
+        error.value = err.errors
 
-                    let item = this.data.find((d) => d.id == this.item.id);
-                    item.name = response.data.data.name;
-                    item.logo = response.data.data.logo;
+        return err
+      })
+  }
+  async function destroy() {
+    return await http.delete(`/admin/categories/${item.value.id}`).then((response) => {
+      data.value.splice(data.value.indexOf(data.value.find(d => d.id === item.value.id)), 1)
 
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
-        delete(id) {
-            http.delete(`/admin/categories/${id}`).then((response) => {
-                this.status = response.status;
-                this.data.splice(this.data.indexOf(this.data.find((d) => d.id == id)), 1);
-            }).catch((error) => {
-                this.error = error.response.data.errors;
-            });
-        },
-        nextPage() {
-            if (this.meta.current_page != this.meta.last_page) {
-                this.meta.current_page++
-                this.getAll();
-            }
-        },
-        prevPage() {
-            if (this.meta.current_page != 1) {
-                this.meta.current_page--
-                this.getAll();
-            }
-        },
+      return err
+    })
+  }
+  function nextPage() {
+    if (meta.value.current_page !== meta.value.last_page) {
+      meta.value.current_page++
+      getAll()
+    }
+  }
+  function prevPage() {
+    if (meta.value.current_page !== 1) {
+      meta.value.current_page--
+      getAll()
+    }
+  }
 
-    
-    },
-
-
-});
+  return { data, item, error, status, meta, all, getAll, store, edit, get, destroy, nextPage, prevPage }
+})

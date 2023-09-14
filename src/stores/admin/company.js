@@ -1,93 +1,91 @@
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
-import { useCategory } from "./category";
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { useCategory } from './category'
+import http from '@/base/http.js'
 
-export const useCompany = defineStore('company', {
-    state: () => ({
-        error: '',
-        data: [],
-        item: {},
-        meta: {
-            current_page: 1,
-            last_page: 1,
-        },
-        status: null,
-    }),
-    actions: {
+export const useCompany = defineStore('company', () => {
+  // eslint-disable-next-line prefer-const
+  let error = ref([])
+  const data = ref([])
+  const item = ref({})
+  const meta = ref({
+    current_page: 1,
+    last_page: 1,
+  })
+  const status = ref(false)
 
+  function store(company) {
+    http.post('admin/companies/', company).then((response) => {
+      data.value.unshift(response.data)
+    }).catch((err) => {
+      error.value = err.errors
+    })
+  }
 
-        store(data) {
+  function all() {
+    http.get('/admin/companies/all')
 
+      .then((response) => {
+        data.value = response.data
 
-            http.post('admin/companies/', data).then((response) => {
-               
-                this.data.unshift(response.data.data);
-            }).catch((error)=>{
-                this.error=error.response.data.errors;
-            });
-        },
+        return useCategory().all(data.value[0].id)
+      }).catch((error) => {
+        error.value = error.response.data.errors
+      })
+  }
+  function getAll() {
+    http.get(`/companies?page=${meta.value.current_page}`)
+      .then((response) => {
+        meta.value = response.meta
 
-        all(){
-            http.get(`/admin/companies/all`)
-                .then((response) => {
-                  
-                    this.data = response.data.data;
-                    useCategory().all(this.data[0].id);
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        }, 
-        getAll() {
-            http.get(`/companies?page=${this.meta.current_page}`)
-                .then((response) => {
-                    this.meta = response.data.meta;
-                    this.data = response.data.data;
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
+        return data.value = response.data
+      }).catch((error) => {
+        error.value = error.response.data.errors
+      })
+  }
 
-        get(id) { this.item = this.data.find((d) => d.id == id); },
+  function get(id) {
+    item.value = data.value.find(d => d.id === id)
+  }
 
-        edit(data) {
+  async function edit(form) {
+    return await http.post(`/admin/companies/edit/${item.value.id}`, form)
+      .then((response) => {
+        if (data.value.find(d => d.id === item.value.id))
 
-            http.post(`/admin/companies/edit/${this.item.id}`, data)
-                .then((response) => {
+          item.value.name = response.data.name
+        item.value.logo = response.data.logo
 
+        return response
+      }).catch((err) => {
+        error.value = err.errors
 
-                    this.status = response.status;
+        return err
+      })
+  }
+  async function destroy() {
+    return await http.delete(`/admin/companies/${item.value.id}`).then((response) => {
+      data.value.splice(data.value.indexOf(data.value.find(d => d.id === item.value.id)), 1)
 
-                    let item = this.data.find((d) => d.id == this.item.id);
-                    item.name = response.data.data.name;
-                    item.logo = response.data.data.logo;
+      return response
+    }).catch((err) => {
+      error.value = err.errors
 
+      return err
+    })
+  }
+  function nextPage() {
+    if (meta.value.current_page !== meta.value.last_page) {
+      meta.value.current_page++
+      getAll()
+    }
+  }
+  function prevPage() {
+    if (meta.value.current_page !== 1) {
+      meta.value.current_page--
+      getAll()
+    }
+  }
 
-                }).catch((error) => {
-                    this.error = error.response.data.errors;
-                });
-        },
-        delete(id) {
-            http.delete(`/admin/companies/${id}`).then((response) => {
-                this.status = response.status;
-                this.data.splice(this.data.indexOf(this.data.find((d) => d.id == id)), 1);
-            }).catch((error) => {
-                this.error = error.response.data.errors;
-            });
-        },
-        nextPage() {
-            if (this.meta.current_page != this.meta.last_page) {
-                this.meta.current_page++
-                this.getAll();
-            }
-        },
-        prevPage() {
-            if (this.meta.current_page != 1) {
-                this.meta.current_page--
-                this.getAll();
-            }
-        },
-
-    },
-
-
-});
+  return { data, item, error, status, meta, all, getAll, store, edit, get, destroy, nextPage, prevPage }
+})

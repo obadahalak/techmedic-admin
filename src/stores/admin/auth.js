@@ -1,37 +1,39 @@
-import { defineStore } from "pinia";
-import http from '@/base/http.js';
-import router from '../../router';
-export const useAuth = defineStore('auth', {
-  state: () => ({
-    'token': localStorage.getItem('token') ?? null,
-    'email': localStorage.getItem('email') ?? null,
-    'error': ''
-  }),
-  actions: {
-    login(credentials) {
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-      http.post('/admin/login', {
-        'email': credentials.email,
-        'password': credentials.password
-      }).then((response) => {
-        this.token = response.data.data.token
-        this.email = response.data.data.email
+import router from '../../router'
 
-        localStorage.setItem('token', this.token)
-        localStorage.setItem('email', response.data.data.email)
+import http from '@/base/http.js'
 
-        router.push('/company');
-      });
-    },
+export const useAuth = defineStore('auth', () => {
+  const token = ref()
+  const error = ref()
 
+  function login(credentials) {
+    http.post('/admin/login', credentials).then((response) => {
+      token.value = response.data.token
 
-    update(data) {
-     
-      http.post('/admin/update', data).then((response) => {
-        localStorage.setItem('email',data.get('email'));
-      
-        router.push('/company');
-      });
-    }
+      router.go('/')
+    }).catch((err) => {
+      error.value = err.errors
+    })
   }
-});
+
+  function update(data) {
+    http.post('/admin/update', data).then((response) => {
+      return router.back()
+    }).catch((err) => {
+      error.value = err.errors
+    })
+  }
+
+  return { token, error, update, login }
+},
+{
+  persist: [
+    {
+      paths: ['token'],
+      storage: localStorage,
+    },
+  ],
+})

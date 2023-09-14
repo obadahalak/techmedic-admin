@@ -1,74 +1,48 @@
-import axios from "axios";
+import axios from 'axios'
 import Notify from 'simple-notify'
-import { pushNotify } from "../components/base/useNotify";
-// import { notify } from "@kyvg/vue3-notification";
+import 'simple-notify/dist/simple-notify.min.css'
 
-import { useGlobal } from '@/stores/global';
-import router from "../router";
+import isAuthenticated from '../composables/isAuthenticated.js'
+
+import { useGlobal } from '@/stores/global'
 
 const createInstance = axios.create({
-    baseURL: `${import.meta.env.VITE_BASE_URL}`,
- 
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type':'multipart/form-data'
-    },
- 
-    validateStatus: function (status) {
-        
-        if (status === 201) {
-            return pushNotify('success','added successfully');
-        }
-        
-       
-        if (status >= 200 && status < 300) {
-            return true;
-        }
-       
-    
-        if (status >= 500 && status  <600) {
-            return pushNotify('error','500','error from server')
-        }
-        if(status===404){
-            return  pushNotify('error','404','not found')
-        }
+  baseURL: `${import.meta.env.VITE_BASE_URL}`,
 
-        if(status===401){
-              pushNotify('warning','401','Unathorize, login please')
-             return router.push('/login'); 
-        }
-       
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'multipart/form-data',
+  },
 
-    },
-});
+})
 
+createInstance.interceptors.request.use((config) => {
+  useGlobal().setloading(true)
+  if (isAuthenticated)
 
-createInstance.interceptors.request.use(config => {
-   
-    useGlobal().setloading(true);
-    if(router.currentRoute.value.name !=='login' && !localStorage.getItem('token')){
+    config.headers.Authorization = `Bearer ${isAuthenticated}`
 
-        router.push('/login');
-    }
-    if(router.currentRoute.value.name=='login' && localStorage.getItem('token')){
-         router.back();
-    }
-    config.headers.Authorization='Bearer ' + localStorage.getItem('token');
-    return config;
+  return config
+})
 
-});
+createInstance.interceptors.response.use((response) => {
+  useGlobal().setloading(false)
 
-createInstance.interceptors.response.use(function (response) {
+  return response.data
+}, (error) => {
+  useGlobal().setloading(false)
 
-    useGlobal().setloading(false);
+  if (error.response.status === 500) {
+    new Notify({
+      status: 'error',
+      title: 'Error from server.',
+      text: 'please try again',
+      autoclose: true,
+      position: 'right bottom',
+    })
+  }
 
-    return response;
+  return Promise.reject(error.response.data)
+})
 
-
-}, function (error) {
-///here you can catch errors 
-    useGlobal().setloading(false);
-    return Promise.reject(error);
-});
-
-export default createInstance;
+export default createInstance
