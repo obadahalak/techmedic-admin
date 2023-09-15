@@ -12,7 +12,7 @@ export const useBanner = defineStore('banner', () => {
   })
 
   function store(banner) {
-    http.post('admin/slider-images/', banner).then((response) => {
+    http.post('admin/slider-images', banner).then((response) => {
       response.data.map((b) => {
         return data.value.unshift({ id: b.id, src: `${import.meta.env.VITE_BASE_URL_IMAGE}${b.path}` })
       })

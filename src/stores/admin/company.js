@@ -15,7 +15,7 @@ export const useCompany = defineStore('company', () => {
   const status = ref(false)
 
   function store(company) {
-    http.post('admin/companies/', company).then((response) => {
+    http.post('admin/companies', company).then((response) => {
       data.value.unshift(response.data)
     }).catch((err) => {
       error.value = err.errors

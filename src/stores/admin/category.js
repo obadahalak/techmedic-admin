@@ -26,7 +26,7 @@ export const useCategory = defineStore('category', () => {
   }
 
   function getAll() {
-    http.get(`/admin/categories/?page=${meta.value.current_page}`)
+    http.get(`/admin/categories?page=${meta.value.current_page}`)
       .then((response) => {
         meta.value = response.meta
         data.value = response.data
@@ -36,7 +36,7 @@ export const useCategory = defineStore('category', () => {
   }
 
   function all(id) {
-    http.get(`/admin/categories/all/?company_id=${id}`)
+    http.get(`/admin/categories/all?company_id=${id}`)
       .then((response) => {
         data.value = response.data
       }).catch((err) => {
